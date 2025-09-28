@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather App - API Integration</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+      background: #f0f4f7;
+    }
+    .container {
+      max-width: 400px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
+    }
+    input {
+      padding: 10px;
+      width: 70%;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      padding: 10px 15px;
+      background: #007BFF;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .weather {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>🌤 Weather App</h2>
+    <input type="text" id="city" placeholder="Enter city name">
+    <button onclick="getWeather()">Get Weather</button>
+    <div class="weather" id="weather"></div>
+  </div>
+
+  <script>
+    async function getWeather() {
+      const city = document.getElementById("city").value;
+      const apiKey = "d20936eeaec09dafee9f953f8539c870"; // 👉 Replace with your free OpenWeatherMap API key
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data.cod === "404") {
+        document.getElementById("weather").innerHTML = "❌ City not found!";
+      } else {
+        document.getElementById("weather").innerHTML = `
+          <p><strong>${data.name}</strong>, ${data.sys.country}</p>
+          <p>🌡 Temperature: ${data.main.temp} °C</p>
+          <p>☁ Weather: ${data.weather[0].description}</p>
+          <p>💨 Wind Speed: ${data.wind.speed} m/s</p>
+        `;
+      }
+    }
+  </script>
+</body>
+</html>
